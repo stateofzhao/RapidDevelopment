@@ -97,9 +97,11 @@ public abstract class ModelWithNet<Q extends QueryEnum, UA extends UserActionEnu
 
           //处理 page
           if (isRefreshQuery(query)) {
+            //fixme 此处是否应该取消加载更多的请求
             tempPageFighting = true;
             tempPage = 0;
           } else if (isLoadMoreQuery(query)) {
+            //fixme 此处是否应该取消刷新的请求
             tempPageFighting = true;
             tempPage = page;
             tempPage++;
