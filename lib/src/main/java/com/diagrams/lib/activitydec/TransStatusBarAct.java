@@ -9,8 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import com.diagrams.lib.AndroidUtils;
-import com.diagrams.lib.OSVersion;
+import com.diagrams.lib.util.AndroidUtils;
+import com.diagrams.lib.util.OSVersion;
 import com.diagrams.lib.activitydec.core.SimpleIActivityDecorator;
 
 /**

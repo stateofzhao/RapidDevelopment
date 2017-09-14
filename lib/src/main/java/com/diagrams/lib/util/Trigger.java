@@ -1,4 +1,4 @@
-package com.diagrams.lib;
+package com.diagrams.lib.util;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

@@ -1,4 +1,4 @@
-package com.diagrams.lib;
+package com.diagrams.lib.util;
 
 import android.os.Build;
 
