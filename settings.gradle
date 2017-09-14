@@ -1,1 +1,1 @@
-include ':sample', ':rapidframework', ':volleyplus'
+include ':apk', ':volleyplus', ':mvp', ':lib'

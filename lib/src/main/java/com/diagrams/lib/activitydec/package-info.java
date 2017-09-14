@@ -1,0 +1,1 @@
+package com.diagrams.lib.activitydec;//装饰着模式修改Activity行为的工具包，这里存放了所有需要对Activity生命周期方法进行装饰的 装饰者类，以及工具
