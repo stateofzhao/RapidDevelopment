@@ -3,11 +3,9 @@ package com.diagrams.rapid.sample;
 import android.app.Activity;
 import android.app.Application;
 import android.support.annotation.Nullable;
-import cn.kuwo.lib.AppContextSupplier;
-import cn.kuwo.lib.AppSupplier;
-import cn.kuwo.lib.MainActivitySupplier;
-import cn.kuwo.lib.share.core.ShareMgrImpl;
-import cn.kuwo.lib.utils.KwDebug;
+import com.diagrams.lib.AppContextSupplier;
+import com.diagrams.lib.AppSupplier;
+import com.diagrams.lib.MainActivitySupplier;
 
 /**
  * 初始化
@@ -90,8 +88,6 @@ public class Init {
         }
         sInitOnce = true;
         MainActivitySupplier.set(activity);//尽早设置
-
-        ShareMgrImpl.getInstance().initSdk(AppContextSupplier.get());
     }
 
     private static boolean prepareExisting;

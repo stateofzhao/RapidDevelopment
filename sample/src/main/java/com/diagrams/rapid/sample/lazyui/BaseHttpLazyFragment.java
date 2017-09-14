@@ -6,15 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import cn.kuwo.mvp.IView;
-import cn.kuwo.mvp.PresenterImpl;
-import cn.kuwo.mvp.QueryEnum;
-import cn.kuwo.mvp.box.CommHttpTask;
-import cn.kuwo.mvp.box.LazyFragmentUI;
-import cn.kuwo.mvp.box.ModelWithHttp;
-import cn.kuwo.mvp.box.PendingObjHandler;
-import cn.kuwo.newplayer.R;
-import cn.kuwo.newplayer.ui.BaseFragment;
+import com.diagrams.lib.fragmentdec.LazyFragmentUI;
+import com.diagrams.lib.lazy.PendingObjHandler;
+import com.diagrams.mvp.IView;
+import com.diagrams.mvp.PresenterImpl;
+import com.diagrams.mvp.QueryEnum;
+import com.diagrams.mvp.box.ModelWithHttp;
+import com.diagrams.rapid.sample.BaseFragment;
 
 /**
  * 懒加载http请求Fragment。<br/>

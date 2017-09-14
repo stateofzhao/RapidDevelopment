@@ -4,15 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
-import cn.kuwo.core.navigatemgr.INavigable;
-import cn.kuwo.core.navigatemgr.NaviBuilder;
-import cn.kuwo.core.navigatemgr.NaviPathParam;
-import cn.kuwo.core.navigatemgr.NavigableItems;
-import cn.kuwo.lib.uilib.activitydec.DispatchIntentAct;
-import cn.kuwo.lib.uilib.activitydec.FragmentOnActivityResultAct;
-import cn.kuwo.lib.uilib.activitydec.NavigableAct;
-import cn.kuwo.lib.uilib.activitydec.core.ActivityDecorators;
-import cn.kuwo.lib.uilib.activitydec.TransStatusBarAct;
+import com.diagrams.lib.activitydec.DispatchIntentAct;
+import com.diagrams.lib.activitydec.FragmentOnActivityResultAct;
+import com.diagrams.lib.activitydec.TransStatusBarAct;
+import com.diagrams.lib.activitydec.core.ActivityDecorators;
 
 /**
  * Activity基类，只做与Activity生命周期有关的处理，所有处理都采用装饰组件的形式来实现。

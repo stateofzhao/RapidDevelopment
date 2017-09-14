@@ -3,7 +3,7 @@ package com.diagrams.rapid.sample;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import cn.kuwo.lib.uilib.fragment.FragmentControl;
+import com.diagrams.lib.fragmentdec.FragmentControl;
 
 /**
  * Fragment基类
