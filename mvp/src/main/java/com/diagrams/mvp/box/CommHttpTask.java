@@ -2,6 +2,7 @@ package com.diagrams.mvp.box;
 
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import com.diagrams.lib.util.KwThreadPool;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
