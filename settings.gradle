@@ -1,1 +1,1 @@
-include ':apk', ':volleyplus', ':mvp', ':lib', ':sample'
+include ':apk', ':volleyplus', ':mvp', ':lib', ':sample', ':core'
