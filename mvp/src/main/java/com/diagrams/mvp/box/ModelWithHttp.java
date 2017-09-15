@@ -40,7 +40,7 @@ public abstract class ModelWithHttp<Q extends ModelWithHttp.HttpQueryEnum, UA ex
 
     private Q[] mQueries;
     private UA[] mUserActions;
-    private SparseArray<CommHttpTask.TaskHandle> mHttpTasks = new SparseArray<>();
+    private SparseArray<IHttpTask> mHttpTasks = new SparseArray<>();
 
     public interface HttpQueryEnum extends QueryEnum {
         String getUrl();
@@ -78,6 +78,8 @@ public abstract class ModelWithHttp<Q extends ModelWithHttp.HttpQueryEnum, UA ex
         mUserActions = userActions;
     }
 
+    protected abstract IHttpTask<String> onCreateHttpTask(String url, byte[] postData);
+
     /** 解析网络数据，子类一般要将数据解析到自身属性中 */
     protected abstract void readDataFromString(Q query, String netResult);
 
@@ -91,10 +93,6 @@ public abstract class ModelWithHttp<Q extends ModelWithHttp.HttpQueryEnum, UA ex
     /** 处理非Http的用户操作 */
     protected void processUserAction(UA userAction, @Nullable Bundle args,
             @Nullable UserActionCallback<UA> callback) {
-    }
-
-    /** 配置Http任务的策略 */
-    protected void httpStrategy(@NonNull CommHttpTask httpTask) {
     }
 
     @Override
@@ -112,9 +110,9 @@ public abstract class ModelWithHttp<Q extends ModelWithHttp.HttpQueryEnum, UA ex
         KwDebug.mustMainThread();
         final int size = mHttpTasks.size();
         for (int i = 0; i < size; i++) {
-            CommHttpTask.TaskHandle taskHandle = mHttpTasks.valueAt(i);
-            if (null != taskHandle) {
-                taskHandle.cancel();
+            IHttpTask task = mHttpTasks.valueAt(i);
+            if (null != task) {
+                task.cancel();
             }
         }
         mHttpTasks.clear();
@@ -159,32 +157,29 @@ public abstract class ModelWithHttp<Q extends ModelWithHttp.HttpQueryEnum, UA ex
 
         final String url = query.getUrl();
         final byte[] postData = query.getPostData();
-        CommHttpTask httpTask = new CommHttpTask();
-        httpStrategy(httpTask);
-        httpTask.postData(postData);
-        final CommHttpTask.TaskHandle taskHandle =
-                httpTask.request(url, new CommHttpTask.Callback() {
-                    @Override
-                    public void callback(int state, String result) {
-                        mHttpTaskLoadState.put(query.getId(), state);
-                        if (state == CommHttpTask.STATE_SUCCESS) {//只有此状态才有值
-                            readDataFromString(query, result);
-                        }
+        IHttpTask<String> workTask = onCreateHttpTask(url, postData);
+        mHttpTasks.put(query.getId(), workTask);
+        workTask.request(new IHttpTask.Callback<String>() {
+            @Override
+            public void onCallback(int state, String result) {
+                mHttpTaskLoadState.put(query.getId(), state);
+                if (state == IHttpTask.STATE_SUCCESS) {//只有此状态才有值
+                    readDataFromString(query, result);
+                }
 
-                        if (state == CommHttpTask.STATE_ERROR) {
-                            if (null != callback) {
-                                callback.onError(query);
-                            }
-                        } else {
-                            if (null != callback) {
-                                callback.onModelUpdated(ModelWithHttp.this, query);
-                            }
-                        }
-
-                        mHttpTasks.remove(query.getId());
+                if (state == IHttpTask.STATE_ERROR) {
+                    if (null != callback) {
+                        callback.onError(query);
                     }
-                });
-        mHttpTasks.put(query.getId(), taskHandle);
+                } else {
+                    if (null != callback) {
+                        callback.onModelUpdated(ModelWithHttp.this, query);
+                    }
+                }
+
+                mHttpTasks.remove(query.getId());
+            }
+        });
     }
 
     @Override
@@ -230,35 +225,32 @@ public abstract class ModelWithHttp<Q extends ModelWithHttp.HttpQueryEnum, UA ex
         }
         final String url = userAction.getUrl(mTempPage);
         final byte[] postData = userAction.getPostData(mTempPage);
-        CommHttpTask httpTask = new CommHttpTask();
-        httpStrategy(httpTask);
-        httpTask.postData(postData);
-        final CommHttpTask.TaskHandle taskHandle =
-                httpTask.request(url, new CommHttpTask.Callback() {
-                    @Override
-                    public void callback(int state, String result) {
-                        mHttpTaskLoadState.put(userAction.getId(), state);
-                        if (state == CommHttpTask.STATE_SUCCESS) {//只有此状态才有值
-                            readDataFromString(userAction, result);
-                        }
+        IHttpTask<String> workTask = onCreateHttpTask(url, postData);
+        mHttpTasks.put(userAction.getId(), workTask);
+        workTask.request(new IHttpTask.Callback<String>() {
+            @Override
+            public void onCallback(int state, String result) {
+                mHttpTaskLoadState.put(userAction.getId(), state);
+                if (state == IHttpTask.STATE_SUCCESS) {//只有此状态才有值
+                    readDataFromString(userAction, result);
+                }
 
-                        if (state == CommHttpTask.STATE_ERROR) {
-                            if (null != callback) {
-                                callback.onError(userAction);
-                            }
-                        } else {
-                            if (null != callback) {
-                                callback.onModelUpdated(ModelWithHttp.this, userAction);
-                            }
-                            if (state == CommHttpTask.STATE_SUCCESS) {
-                                mCurrentPage++;
-                            }
-                        }
-
-                        mHttpTasks.remove(userAction.getId());
+                if (state == IHttpTask.STATE_ERROR) {
+                    if (null != callback) {
+                        callback.onError(userAction);
                     }
-                });
-        mHttpTasks.put(userAction.getId(), taskHandle);
+                } else {
+                    if (null != callback) {
+                        callback.onModelUpdated(ModelWithHttp.this, userAction);
+                    }
+                    if (state == IHttpTask.STATE_SUCCESS) {
+                        mCurrentPage++;
+                    }
+                }
+
+                mHttpTasks.remove(userAction.getId());
+            }
+        });
     }
 
     private boolean isRefreshUserAction(Bundle args) {
@@ -290,8 +282,8 @@ public abstract class ModelWithHttp<Q extends ModelWithHttp.HttpQueryEnum, UA ex
         if (null == query) {
             return false;
         }
-        CommHttpTask.TaskHandle taskHandle = mHttpTasks.get(query.getId());
-        return null != taskHandle && taskHandle.isActive();
+        IHttpTask task = mHttpTasks.get(query.getId());
+        return null != task && task.isActive();
     }
 
     //网络任务是否正在执行
@@ -299,8 +291,8 @@ public abstract class ModelWithHttp<Q extends ModelWithHttp.HttpQueryEnum, UA ex
         if (null == userAction) {
             return false;
         }
-        CommHttpTask.TaskHandle taskHandle = mHttpTasks.get(userAction.getId());
-        return null != taskHandle && taskHandle.isActive();
+        IHttpTask task = mHttpTasks.get(userAction.getId());
+        return null != task && task.isActive();
     }
 
     private int mCurrentPage = 1;//分页页数，从1开始
