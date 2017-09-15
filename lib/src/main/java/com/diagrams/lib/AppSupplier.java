@@ -11,6 +11,12 @@ import android.os.Looper;
  */
 public class AppSupplier {
 
+    //是否是debug版本
+    public static boolean IS_DEBUG = true;
+    // 是否是正式包，非正式的试用包也是release包，但可能会有某些日志记录等额外行为
+    public static boolean IS_FORMAL = false;
+
+
     private static boolean sIsExiting = false;
 
     public static void setIsExiting(boolean exiting) {
