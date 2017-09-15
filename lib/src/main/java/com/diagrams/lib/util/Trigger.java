@@ -2,7 +2,6 @@ package com.diagrams.lib.util;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-//by haiping
 public final class Trigger {
     public interface Listener {
         void trigger();
