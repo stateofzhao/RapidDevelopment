@@ -16,11 +16,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
-import static cn.kuwo.lib.uilib.fragment.FragmentControl.SameTagSty.CHECK;
-import static cn.kuwo.lib.uilib.fragment.FragmentControl.SameTagSty.COEXIST;
-import static cn.kuwo.lib.uilib.fragment.FragmentControl.SameTagSty.POP;
-import static cn.kuwo.lib.uilib.fragment.FragmentControl.SameTagSty.REMOVE;
-import static cn.kuwo.lib.uilib.fragment.FragmentControl.SameTagSty.WEAK_CHECK;
+import static com.diagrams.lib.fragmentdec.FragmentControl.SameTagSty.CHECK;
+import static com.diagrams.lib.fragmentdec.FragmentControl.SameTagSty.COEXIST;
+import static com.diagrams.lib.fragmentdec.FragmentControl.SameTagSty.POP;
+import static com.diagrams.lib.fragmentdec.FragmentControl.SameTagSty.REMOVE;
+import static com.diagrams.lib.fragmentdec.FragmentControl.SameTagSty.WEAK_CHECK;
 
 /**
  * 针对单个Activity的Fragment管理器

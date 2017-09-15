@@ -5,6 +5,7 @@ import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
 /**
+ * 存放与android相关的工具方法
  * <p/>
  * Created by lizhaofei on 2017/9/14 18:26
  */
